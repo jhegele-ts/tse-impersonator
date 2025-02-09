@@ -17,7 +17,8 @@ import {
 } from "./api/auth/token/schema";
 import { stylesPageHome } from "./page.styles";
 import { Slider } from "@/components/slider/slider";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { AlertDialog } from "@/components/alert-dialog/alert-dialog";
 
 const PageHome = () => {
   const classes = stylesPageHome();
@@ -47,6 +48,7 @@ const PageHome = () => {
       sessionLengthMins: 15,
     },
   });
+  const [authErrorMessage, setAuthErrorMessage] = useState<string>("");
   const router = useRouter();
 
   const prefillValues = useCallback(() => {
@@ -75,10 +77,15 @@ const PageHome = () => {
     prefillValues();
   };
 
+  const handleAlertOpenChange = (open: boolean) => {
+    if (!open) setAuthErrorMessage("");
+  };
+
   const onSubmit = handleSubmit(async (formData) => {
     const resToken = await getToken(formData);
     if ("error" in resToken) {
-      throw new Error(resToken.error.message);
+      setAuthErrorMessage(resToken.error.message);
+      return;
     }
 
     setAuth(
@@ -190,6 +197,19 @@ const PageHome = () => {
           </styled.div>
         </styled.form>
       </styled.div>
+      <AlertDialog
+        open={Boolean(authErrorMessage)}
+        onOpenChange={handleAlertOpenChange}
+        title="Authentication error"
+        description={authErrorMessage}
+        buttons={{
+          action: (
+            <Button variant="primary" type="button">
+              OK
+            </Button>
+          ),
+        }}
+      />
     </styled.div>
   );
 };

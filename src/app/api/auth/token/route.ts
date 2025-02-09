@@ -41,8 +41,7 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json(
       {
         error: {
-          message:
-            "Authentication error. Please check your username and secret key and try again.",
+          message: "Please check your username and secret key and try again.",
         },
       },
       { status: 403 }
