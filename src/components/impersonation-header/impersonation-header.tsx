@@ -17,8 +17,19 @@ export const ImpersonationHeader = () => {
   const [now, setNow] = useState<DateTime>(DateTime.now());
   const router = useRouter();
 
+  // time diff to expiry (expiry - now)
+  const toExpiry = useMemo(() => {
+    if (auth) {
+      const expiry = DateTime.fromMillis(auth.expiration_time_in_millis);
+      return expiry.diff(now);
+    }
+    return undefined;
+  }, [now, auth]);
+
   const handleLogout = (invalidateToken: boolean = true) => {
     if (auth && host) {
+      // allow logging out without invalidating token to account for
+      // the fact that expired tokens will implicitly be invalid
       if (invalidateToken) tsLogout(host, auth.valid_for_user_id, auth.token);
       logout();
       router.push("/");
@@ -34,14 +45,12 @@ export const ImpersonationHeader = () => {
     let timeout: NodeJS.Timeout | undefined = undefined;
 
     // automatically log user out at token expiry (avoid alert from TSE)
-    if (auth) {
-      const expiry = DateTime.fromMillis(auth.expiration_time_in_millis);
-      const toExpiry = expiry.diff(DateTime.now()).toObject();
+    if (auth && toExpiry) {
       timeout = setTimeout(() => {
         // if logging out at expiry, invalidating token will throw an error
         // since the token is already invalid
         handleLogout(false);
-      }, toExpiry.milliseconds);
+      }, toExpiry.as("milliseconds"));
     }
 
     // clean up
@@ -55,18 +64,18 @@ export const ImpersonationHeader = () => {
 
   // format timer
   const timeRemaining = useMemo(() => {
-    if (auth) {
-      const expiry = DateTime.fromMillis(auth.expiration_time_in_millis);
-      const { minutes, seconds } = expiry
-        .diff(now, ["minutes", "seconds"])
-        .toObject();
-      if (minutes !== undefined && seconds !== undefined) {
-        if (minutes >= 0 && seconds >= 0) {
-          const useSeconds = Math.floor(seconds);
-          const mins = minutes < 10 ? `0${minutes}` : `${minutes}`;
-          const secs = useSeconds < 10 ? `0${useSeconds}` : `${useSeconds}`;
-          return `0:${mins}:${secs}`;
-        }
+    if (toExpiry) {
+      // calculate minutes and seconds from expiry diff
+      const totalSeconds = Math.floor(toExpiry.as("seconds"));
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      // prevent inadvertenty showing negative values
+      if (minutes >= 0 && seconds >= 0) {
+        const mins = minutes < 10 ? `0${minutes}` : `${minutes}`;
+        const secs = seconds < 10 ? `0${seconds}` : `${seconds}`;
+        return `0:${mins}:${secs}`;
+      } else {
+        return "0:00:00";
       }
     }
   }, [now, auth]);
@@ -79,7 +88,12 @@ export const ImpersonationHeader = () => {
       <styled.span className={classes.user}>
         Impersonating: {auth?.valid_for_username}
       </styled.span>
-      <styled.span className={classes.timer}>{timeRemaining}</styled.span>
+      <styled.span
+        className={classes.timer}
+        data-pulse={toExpiry ? toExpiry?.as("seconds") <= 30 : false}
+      >
+        {timeRemaining}
+      </styled.span>
     </styled.div>
   );
 };

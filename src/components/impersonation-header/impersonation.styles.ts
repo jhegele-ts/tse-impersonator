@@ -22,7 +22,11 @@ export const stylesSlotsImpersonationHeader = sva({
       position: "absolute",
       top: "50%",
       left: "50%",
+      transformOrigin: "center",
       transform: "translate(-50%, -50%)",
+      "&[data-pulse=true]": {
+        animation: "textPulse 2s infinite",
+      },
     },
   },
 });

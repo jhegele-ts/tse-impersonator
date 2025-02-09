@@ -108,6 +108,17 @@ export default defineConfig({
             transform: "translate(-50%, -50%) scale(1)",
           },
         },
+        textPulse: {
+          "0%": {
+            transform: "translate(-50%, -50%) scale(1)",
+          },
+          "70%": {
+            transform: "translate(-50%, -50%) scale(1.25)",
+          },
+          "100%": {
+            transform: "translate(-50%, -50%) scale(1)",
+          },
+        },
       },
     },
   },
