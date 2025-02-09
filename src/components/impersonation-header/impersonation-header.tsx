@@ -37,7 +37,12 @@ export const ImpersonationHeader = () => {
   };
 
   useEffect(() => {
-    // update timer every 1000 milliseconds (1 second)
+    // rather than naively let JS count down for us, it's more accurate to
+    // periodically update the time remaining to a target and use that as
+    // the countdown. here we do that by updating the current time every
+    // 1000 milliseconds which provides a more reliable countdown that is
+    // more resiliant against weird/unexpected issues that may block the
+    // main thread.
     const interval = setInterval(() => {
       setNow(DateTime.now());
     }, 1000);
@@ -53,7 +58,7 @@ export const ImpersonationHeader = () => {
       }, toExpiry.as("milliseconds"));
     }
 
-    // clean up
+    // clean up effect
     return () => {
       clearInterval(interval);
       if (timeout) {
