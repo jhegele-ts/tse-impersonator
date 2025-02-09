@@ -13,7 +13,7 @@ export const stylesButton = cva({
     py: "6px",
     fontSize: "14px",
     fontWeight: 400,
-    lineHeight: "16.1px",
+    lineHeight: 1,
     verticalAlign: "middle",
     cursor: "pointer",
   },

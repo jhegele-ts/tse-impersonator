@@ -10,12 +10,22 @@ export const stylesSlotsImpersonationHeader = sva({
       bg: "tsMagenta",
       display: "flex",
       flexDirection: "row",
+      alignItems: "center",
       justifyContent: "space-between",
       position: "relative",
       color: "white",
     },
     title: {
+      display: "flex",
+      flexDirection: "column",
+      // fontSize: '15px',
       fontWeight: "600",
+    },
+    user: {
+      fontSize: "13px",
+      fontFamily: "bbRollerMono",
+      fontWeight: 400,
+      lineHeight: 1,
     },
     timer: {
       fontFamily: "bbRollerMono",

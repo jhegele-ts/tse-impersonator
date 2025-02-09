@@ -8,6 +8,7 @@ import { DateTime } from "luxon";
 import { useEffect, useMemo, useState } from "react";
 import { tsLogout } from "@/lib/token";
 import { useRouter } from "next/navigation";
+import { Button } from "../button/button";
 
 export const ImpersonationHeader = () => {
   const classes = stylesSlotsImpersonationHeader();
@@ -87,12 +88,15 @@ export const ImpersonationHeader = () => {
 
   return (
     <styled.div className={classes.outerContainer}>
-      <styled.span className={classes.title}>
+      <styled.div className={classes.title}>
         ThoughtSpot Impersonator
-      </styled.span>
-      <styled.span className={classes.user}>
-        Impersonating: {auth?.valid_for_username}
-      </styled.span>
+        <styled.span className={classes.user}>
+          {auth?.valid_for_username}
+        </styled.span>
+      </styled.div>
+      <Button type="button" variant="secondary" onClick={() => handleLogout()}>
+        Logout
+      </Button>
       <styled.span
         className={classes.timer}
         data-pulse={toExpiry ? toExpiry?.as("seconds") <= 30 : false}
