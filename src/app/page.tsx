@@ -113,8 +113,8 @@ const PageHome = () => {
           Please be cautious when using this application as the information
           provided below can be used to gain access to and alter your
           ThoughtSpot cluster. This application does not store or log any of the
-          information you provide here. It is used to generate a token as part
-          of ThoughtSpot's{" "}
+          information you provide. It is used to generate a token as part of
+          ThoughtSpot's{" "}
           <Link
             href="https://developers.thoughtspot.com/docs/trusted-auth"
             target="_blank"
