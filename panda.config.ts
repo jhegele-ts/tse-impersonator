@@ -141,6 +141,9 @@ export default defineConfig({
     },
     a: {
       textDecoration: "underline dotted",
+      "&:hover": {
+        textDecoration: "none",
+      },
     },
   },
 });

@@ -19,7 +19,8 @@ export default function RootLayout({
       className={`${FontOptimo.variable} ${FontBBRollerMono.variable}`}
     >
       <body>
-        <TsInitProvider>{children}</TsInitProvider>
+        {children}
+        {/* <TsInitProvider>{children}</TsInitProvider> */}
       </body>
     </html>
   );

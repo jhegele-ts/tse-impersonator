@@ -4,9 +4,13 @@ import { styled } from "#/jsx";
 import { AppEmbed } from "@thoughtspot/visual-embed-sdk/react";
 import { stylesSlotsPageImpersonated } from "./page.styles";
 import { ImpersonationHeader } from "@/components/impersonation-header/impersonation-header";
+import { useTsInit } from "@/hooks/useTsInit";
 
 const PageImpersonated = () => {
   const classes = stylesSlotsPageImpersonated();
+  const { isInitialized } = useTsInit();
+
+  if (!isInitialized) return null;
 
   return (
     <styled.div className={classes.outerContainer}>
