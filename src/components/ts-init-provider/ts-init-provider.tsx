@@ -1,12 +1,12 @@
 "use client";
 
-import { type JSX, useCallback, useEffect, useState } from "react";
-import { tsInitContext } from "./ts-init-context";
 import {
   type AuthEventEmitter,
   type EmbedConfig,
   init,
 } from "@thoughtspot/visual-embed-sdk";
+import { useCallback, useEffect, useState } from "react";
+import { tsInitContext } from "./ts-init-context";
 
 export type TsInitProviderProps = {
   children?: React.ReactNode;
